@@ -8,6 +8,8 @@ SCREEN_WIDTH, SCREEN_HEIGHT = 640, 480
 GRID_SIZE = 20
 GRID_WIDTH = SCREEN_WIDTH // GRID_SIZE
 GRID_HEIGHT = SCREEN_HEIGHT // GRID_SIZE
+# Размер одной ячейки в пикселях (ширина и высота):
+CELL_SIZE = (GRID_SIZE, GRID_SIZE)
 
 # Центральная точка игрового поля:
 CENTER_POSITION = ((SCREEN_WIDTH // 2), (SCREEN_HEIGHT // 2))
@@ -66,7 +68,8 @@ clock = pygame.time.Clock()
 class GameObject:
     """Общий класс для всех объектов на поле.
 
-    Здесь хранится место на полеи цвет. Как объект выглядит, решает дочерний класс.
+    Здесь хранится то, что есть у каждого объекта: место на поле
+    и цвет. Как объект выглядит, решает дочерний класс.
 
     Attributes:
         position: координаты верхнего левого угла объекта.
@@ -74,7 +77,7 @@ class GameObject:
     """
 
     def __init__(self):
-        """Ставит объект в центр поля."""
+        """Ставит объект в центр поля. Цвет пока не задан."""
         self.position = CENTER_POSITION
         self.body_color = None
 
@@ -94,7 +97,7 @@ class GameObject:
             position: координаты верхнего левого угла клетки.
             color: цвет, которым залить клетку (RGB).
         """
-        rect = pygame.Rect(position, (GRID_SIZE, GRID_SIZE))
+        rect = pygame.Rect(position, CELL_SIZE)
         pygame.draw.rect(screen, color, rect)
         pygame.draw.rect(screen, BORDER_COLOR, rect, 1)
 
@@ -212,7 +215,7 @@ class Snake(GameObject):
         рисуем голову. Остальные кусочки уже нарисованы раньше.
         """
         if self.last:
-            last_rect = pygame.Rect(self.last, (GRID_SIZE, GRID_SIZE))
+            last_rect = pygame.Rect(self.last, CELL_SIZE)
             pygame.draw.rect(screen, BOARD_BACKGROUND_COLOR, last_rect)
         self.draw_cell(self.get_head_position(), self.body_color)
 
